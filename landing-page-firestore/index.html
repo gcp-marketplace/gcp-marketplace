@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Cloud Marketplace Setup</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #e8f0fe 0%, #d2e3fc 100%);
+            overflow-x: hidden;
+        }
+
+        /* --- CSS CLOUDS BACKGROUND --- */
+        .cloud-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+        .cloud { position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 100px; }
+        .cloud::before, .cloud::after { content: ''; position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%; }
+        .cloud-1 { width: 160px; height: 50px; top: 15%; left: 10%; }
+        .cloud-1::before { width: 70px; height: 70px; top: -30px; left: 20px; }
+        .cloud-1::after { width: 90px; height: 90px; top: -45px; right: 20px; }
+        .cloud-2 { width: 220px; height: 70px; top: 50%; right: 5%; }
+        .cloud-2::before { width: 90px; height: 90px; top: -40px; left: 30px; }
+        .cloud-2::after { width: 120px; height: 120px; top: -60px; right: 30px; }
+        .cloud-3 { width: 120px; height: 40px; bottom: 20%; left: 20%; }
+        .cloud-3::before { width: 50px; height: 50px; top: -20px; left: 15px; }
+        .cloud-3::after { width: 60px; height: 60px; top: -30px; right: 15px; }
+
+        /* --- CARD & FORM STYLING --- */
+        .card {
+            background-color: #ffffff;
+            padding: 48px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 420px;
+            box-sizing: border-box;
+            z-index: 1;
+            border-top: 6px solid #1a73e8; 
+        }
+
+        .header-graphics {
+            display: flex; justify-content: center; align-items: center; margin-bottom: 24px;
+        }
+
+        .cart-icon {
+            display: flex; align-items: center; justify-content: center;
+            background: #e8f0fe; border-radius: 50%; width: 60px; height: 60px;
+        }
+
+        h2 { color: #202124; margin: 0 0 8px 0; font-size: 28px; font-weight: 700; text-align: center; }
+        p.subtitle { color: #5f6368; text-align: center; margin: 0 0 32px 0; font-size: 14px; }
+        
+        .input-group { margin-bottom: 20px; }
+        
+        input[type="text"], input[type="email"], select {
+            width: 100%; padding: 14px 16px; border: 1px solid #dadce0; border-radius: 6px;
+            box-sizing: border-box; font-family: inherit; font-size: 15px; color: #202124;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: #ffffff;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, select:focus {
+            border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2); outline: none;
+        }
+        
+        input::placeholder { color: #80868b; }
+        
+        .checkbox-group {
+            display: flex; align-items: flex-start; margin-top: 24px; margin-bottom: 32px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 2px; margin-right: 12px; accent-color: #1a73e8; cursor: pointer;
+            width: 18px; height: 18px; flex-shrink: 0;
+        }
+        .checkbox-group label { font-size: 13px; color: #5f6368; line-height: 1.5; }
+        .checkbox-group a { color: #1a73e8; text-decoration: none; font-weight: 500; }
+        .checkbox-group a:hover { text-decoration: underline; }
+        
+        button {
+            width: 100%; padding: 14px; background-color: #1a73e8; color: white; border: none;
+            border-radius: 6px; font-size: 15px; font-weight: 500; cursor: pointer;
+            font-family: inherit; transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        button:hover { background-color: #1557b0; box-shadow: 0 2px 6px rgba(26, 115, 232, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="cloud-bg">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+    </div>
+
+    <div class="card">
+        <div class="header-graphics">
+            <div class="cart-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill="#1a73e8">
+                    <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/>
+                </svg>
+            </div>
+        </div>
+
+        <h2>Complete Setup</h2>
+        <p class="subtitle">Finalize your Google Cloud Marketplace purchase</p>
+        
+        <form action="/setup" method="POST">
+            <input type="hidden" name="x-gcp-marketplace-token" value="{{MARKETPLACE_TOKEN}}">
+            
+            <div class="input-group">
+                <input type="text" name="name" placeholder="Full Name" required>
+            </div>
+            
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" name="company" placeholder="Company Name" required>
+            </div>
+
+            <!-- New Dropdown Field -->
+            <div class="input-group">
+                <select name="productName" required>
+                    <option value="" disabled selected>Select the product you purchased</option>
+                    <option value="product-a">product-a</option>
+                    <option value="product-b">product-b</option>
+                </select>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the <a href="#">Terms of Service</a>, <a href="#">Privacy Policy</a></label>
+            </div>
+            
+            <button type="submit">Complete Registration</button>
+        </form>
+    </div>
+</body>
+</html>
