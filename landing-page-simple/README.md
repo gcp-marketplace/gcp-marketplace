@@ -63,7 +63,7 @@ To display your company or product logo:
 
 ---
 
-## Option 1: Development / Testing Deployment
+## Development / Testing Deployment
 
 To quickly deploy this thank-you page natively on Google Cloud Run for testing purposes (without the enterprise security perimeter):
 
@@ -77,7 +77,7 @@ Once deployed, you can use the generated `run.app` URL for testing.
 
 ---
 
-## Option 2: Production-Grade Deployment (Terraform & `deploy.sh`)
+## Production-Grade Deployment (Terraform & `deploy.sh`)
 
 For real-world production environments, this project includes a `deploy.sh` script that works alongside Terraform to deploy your application behind an enterprise security perimeter (Global Load Balancer + Cloud Armor), satisfying organizational domain restriction policies.
 
