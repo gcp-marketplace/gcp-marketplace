@@ -14,18 +14,23 @@ https://docs.cloud.google.com/marketplace/docs/partners/integrated-saas
 - **Token Handlers:** Safely captures and logs the `x-gcp-marketplace-token` passed by Google Cloud Marketplace via HTTP POST requests upon user purchase or configuration redirection.
 - **Modern UI Design:** Styled with a clean, Google-inspired interface complete with custom cloud backgrounds, a success checkmark animation, and support for your company's product logo (`sample-image.png`).
 - **Zero Heavy Dependencies:** Built strictly using lightweight Express.js for fast container boot times and minimal vulnerability exposure.
+- **Enterprise Infrastructure as Code:** Includes production-ready Terraform configurations to deploy the app behind a Global Load Balancer and Cloud Armor (WAF).
 
 ---
 
 ## Project Structure
 
 ```text
-gcp-marketplace-thankyou-v1/
-├── index.html       # Frontend interface (HTML & embedded CSS)
-├── index.js         # Backend Express server handling requests & tokens
-├── package.json     # Node.js dependencies and run scripts
-└── README.md        # Documentation
-└── sample-image.png # Logo
+landing-page-simple/
+├── .gcloudignore      # Specifies files to omit from container builds
+├── deploy.sh          # Automated CI/CD script for building and applying Terraform
+├── Dockerfile         # Instructions for building the container image
+├── index.html         # Frontend interface (HTML & embedded CSS)
+├── index.js           # Backend Express server handling requests & tokens
+├── package.json       # Node.js dependencies and run scripts
+├── README.md          # Documentation
+├── sample-image.png   # Logo
+└── terraform/         # Infrastructure as Code (Terraform)
 ```
 
 ---
@@ -67,15 +72,67 @@ To display your company or product logo:
 
 ---
 
-## Deployment to Google Cloud (Cloud Run)
+## Option 1: Development / Testing Deployment
 
-To deploy this thank-you page natively on Google Cloud Run:
+To quickly deploy this thank-you page natively on Google Cloud Run for testing purposes (without the enterprise security perimeter):
 
-   Deploy the service to Cloud Run:
    ```bash
    gcloud run deploy gcp-marketplace-thankyou \
     --source . --region us-central1 \
     --allow-unauthenticated
    ```
 
-Once deployed, copy the generated service URL and configure it as the **Setup URL** inside your Google Cloud Marketplace Partner Portal.
+Once deployed, you can use the generated `run.app` URL for testing.
+
+---
+
+## Option 2: Production-Grade Deployment (Terraform & `deploy.sh`)
+
+For real-world production environments, this project includes a `deploy.sh` script that works alongside Terraform to deploy your application behind an enterprise security perimeter (Global Load Balancer + Cloud Armor), satisfying organizational domain restriction policies.
+
+### Production Prerequisites (One-Time Setup)
+
+Before running the deployment script for the first time, you must create an Artifact Registry repository for your container images and a Cloud Storage bucket for Terraform's state file.
+
+1. **Create the Artifact Registry Repository:**
+   ```bash
+   gcloud artifacts repositories create marketplace-repo \
+     --repository-format=docker \
+     --location=us-central1
+   ```
+
+2. **Create the Terraform State Bucket:**
+   ```bash
+   # Replace YOUR_PROJECT_ID with your actual project ID
+   export TF_STATE_BUCKET="YOUR_PROJECT_ID-tf-state"
+   gcloud storage buckets create gs://$TF_STATE_BUCKET --location=us-central1
+   gcloud storage buckets update gs://$TF_STATE_BUCKET --versioning
+   ```
+
+3. **Update Terraform Backend:**
+   Open `terraform/provider.tf` and update the `bucket` value to match the bucket name you just created.
+
+4. **Configure Parameters:**
+   * Open `deploy.sh` and update `PROJECT_ID`, `REGION`, and `REPO_NAME` if necessary.
+   * Open `terraform/production.tfvars` and ensure your `project_id`, `service_name`, and `image` path reflect your environment.
+
+### Running the Deployment
+
+Whenever you make changes to your application code (like updating the HTML or adding a new logo) or infrastructure, simply run the deployment script:
+
+1. Make the script executable (only needed once):
+   ```bash
+   chmod +x deploy.sh
+   ```
+
+2. Run the deployment:
+   ```bash
+   ./deploy.sh
+   ```
+
+**What `deploy.sh` does:**
+1. Packages your source code and uses Google Cloud Build to create a Docker container image (ignoring files specified in `.gcloudignore`).
+2. Pushes the new image to your Artifact Registry.
+3. Initializes Terraform and applies your infrastructure changes, routing the Load Balancer to the newly built image.
+
+Once deployment completes, Terraform will output a `load_balancer_ip`. You will use this static IP to configure the **Setup URL** inside your Google Cloud Marketplace Partner Portal.
