@@ -9,15 +9,6 @@ https://docs.cloud.google.com/marketplace/docs/partners/integrated-saas
 
 ---
 
-## Features
-
-- **Token Handlers:** Safely captures and logs the `x-gcp-marketplace-token` passed by Google Cloud Marketplace via HTTP POST requests upon user purchase or configuration redirection.
-- **Modern UI Design:** Styled with a clean, Google-inspired interface complete with custom cloud backgrounds, a success checkmark animation, and support for your company's product logo (`sample-image.png`).
-- **Zero Heavy Dependencies:** Built strictly using lightweight Express.js for fast container boot times and minimal vulnerability exposure.
-- **Enterprise Infrastructure as Code:** Includes production-ready Terraform configurations to deploy the app behind a Global Load Balancer and Cloud Armor (WAF).
-
----
-
 ## Project Structure
 
 ```text
